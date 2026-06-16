@@ -7,6 +7,9 @@ import react from '@vitejs/plugin-react';
 // 注意：excalidraw(含 mermaid-to-excalidraw)、reactflow 体积都很大，
 // 且都已通过 React.lazy 懒加载，分到独立 chunk 后只在实际使用时才下载。
 export default defineConfig({
+  // GitHub Pages 部署时需要设置 base 为仓库名
+  // 本地开发时使用根路径 '/'
+  base: process.env.GITHUB_ACTIONS ? '/learn-ml/' : '/',
   plugins: [react()],
   build: {
     rollupOptions: {
