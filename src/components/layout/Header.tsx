@@ -1,0 +1,30 @@
+import { SearchBar } from '../SearchBar';
+import { ThemeToggle } from '../ThemeToggle';
+import type { AlgorithmItem } from '../../data/algorithms';
+
+interface HeaderProps {
+  onSelectAlgorithm: (algo: AlgorithmItem) => void;
+}
+
+// 中文注释：网站头部组件，包含品牌标识、搜索栏、主题切换和导航链接
+export function Header({ onSelectAlgorithm }: HeaderProps) {
+  return (
+    <header className="site-header">
+      <a className="brand" href="#top" aria-label="返回首页">
+        <span className="brand-mark">ML</span>
+        <span>Learn Matrix</span>
+      </a>
+      <SearchBar onSelectAlgorithm={onSelectAlgorithm} />
+      <div className="header-actions">
+        <ThemeToggle />
+      </div>
+      <nav className="nav-links" aria-label="主导航">
+        <a href="#roadmap">学习路线</a>
+        <a href="#algorithms">算法图谱</a>
+        {/* 暂时隐藏：建模流程和应用方向功能待实现 */}
+        {/* <a href="#workflow">建模流程</a> */}
+        {/* <a href="#applications">应用方向</a> */}
+      </nav>
+    </header>
+  );
+}

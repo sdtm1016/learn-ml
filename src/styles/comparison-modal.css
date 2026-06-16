@@ -1,0 +1,261 @@
+/* 对比 Modal 样式 */
+.comparison-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.2s ease;
+}
+
+.comparison-modal-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  max-width: 1400px;
+  max-height: 90vh;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--bg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+.comparison-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--line);
+}
+
+.comparison-modal-header h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.comparison-modal-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.comparison-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comparison-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.comparison-modal-close:hover {
+  border-color: var(--accent);
+  background: rgba(54, 241, 205, 0.1);
+}
+
+/* 对比网格 */
+.comparison-grid {
+  display: grid;
+  gap: 1px;
+  overflow-y: auto;
+  background: var(--line);
+}
+
+.comparison-grid.cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.comparison-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.comparison-column {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.comparison-column-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.comparison-column-header h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.comparison-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.success {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.badge.info {
+  color: var(--accent-blue);
+  background: rgba(88, 166, 255, 0.15);
+}
+
+.comparison-remove-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.comparison-remove-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.comparison-column-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.comparison-section {
+  margin-bottom: 24px;
+}
+
+.comparison-section:last-child {
+  margin-bottom: 0;
+}
+
+.comparison-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-section h4 .icon-success {
+  color: #22c55e;
+}
+
+.comparison-section h4 .icon-warning {
+  color: #f59e0b;
+}
+
+.comparison-section p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.comparison-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.comparison-tags .tag {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.code-example-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.code-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--accent-blue);
+  background: var(--panel);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.code-link:hover {
+  border-color: var(--accent-blue);
+  background: rgba(88, 166, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .comparison-grid.cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-modal-container {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+}
+

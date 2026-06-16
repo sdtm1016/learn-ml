@@ -1,0 +1,127 @@
+/* 中文注释：快捷键帮助 Modal 样式 */
+
+.keyboard-help-overlay {
+  z-index: 10000;
+}
+
+.keyboard-help-modal {
+  position: relative;
+  width: min(720px, calc(100vw - 48px));
+  max-height: calc(100vh - 96px);
+  padding: 40px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--bg);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+}
+
+.keyboard-help-modal h2 {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.keyboard-help-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.keyboard-help-sections section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.keyboard-help-sections h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.keyboard-help-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.keyboard-help-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--panel);
+  transition: background 0.2s ease;
+}
+
+.keyboard-help-item:hover {
+  background: var(--panel-strong);
+}
+
+.keyboard-help-item kbd {
+  flex: 0 0 auto;
+  min-width: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1;
+}
+
+.keyboard-help-item span {
+  flex: 1;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.keyboard-help-footer {
+  margin: 32px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 响应式：移动端优化 */
+@media (max-width: 768px) {
+  .keyboard-help-modal {
+    width: calc(100vw - 32px);
+    padding: 24px;
+  }
+
+  .keyboard-help-modal h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .keyboard-help-sections {
+    gap: 24px;
+  }
+
+  .keyboard-help-item {
+    gap: 12px;
+    padding: 10px 12px;
+  }
+
+  .keyboard-help-item kbd {
+    min-width: 40px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .keyboard-help-item span {
+    font-size: 14px;
+  }
+}

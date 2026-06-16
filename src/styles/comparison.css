@@ -1,0 +1,190 @@
+/* ============================================
+   算法对比功能样式
+   ============================================ */
+
+/* 算法卡片包装器 - 支持对比按钮 */
+.algorithm-card-wrapper {
+  position: relative;
+}
+
+.algorithm-card-wrapper.in-comparison {
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+}
+
+/* 加入对比按钮 */
+.add-to-comparison-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.algorithm-card-wrapper:hover .add-to-comparison-btn {
+  opacity: 1;
+}
+
+.add-to-comparison-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(54, 241, 205, 0.1);
+}
+
+.add-to-comparison-btn.active {
+  opacity: 1;
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(54, 241, 205, 0.15);
+}
+
+.add-to-comparison-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 浮动对比面板 */
+.comparison-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 320px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.comparison-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.comparison-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.comparison-clear {
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.comparison-clear:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.comparison-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.comparison-item-name {
+  flex: 1;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.comparison-item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  color: var(--muted);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.comparison-item-remove:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.comparison-start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 40px);
+  margin: 0 20px 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-blue) 100%);
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.comparison-start-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(54, 241, 205, 0.4);
+}
+
+.comparison-start-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comparison-hint {
+  margin: 0 20px 16px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .comparison-panel {
+    right: 16px;
+    bottom: 16px;
+    width: calc(100% - 32px);
+    max-width: 320px;
+  }
+}
+
