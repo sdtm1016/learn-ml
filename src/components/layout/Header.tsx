@@ -4,10 +4,11 @@ import type { AlgorithmItem } from '../../data/algorithms';
 
 interface HeaderProps {
   onSelectAlgorithm: (algo: AlgorithmItem) => void;
+  onOpenMedicalDoc?: () => void;
 }
 
 // 中文注释：网站头部组件，包含品牌标识、搜索栏、主题切换和导航链接
-export function Header({ onSelectAlgorithm }: HeaderProps) {
+export function Header({ onSelectAlgorithm, onOpenMedicalDoc }: HeaderProps) {
   return (
     <header className="site-header">
       <a className="brand" href="#top" aria-label="返回首页">
@@ -21,6 +22,13 @@ export function Header({ onSelectAlgorithm }: HeaderProps) {
       <nav className="nav-links" aria-label="主导航">
         <a href="#roadmap">学习路线</a>
         <a href="#algorithms">算法图谱</a>
+        <button
+          className="nav-link-button"
+          onClick={onOpenMedicalDoc}
+          aria-label="查看医疗AI核心算法详解"
+        >
+          🏥 医疗算法
+        </button>
         {/* 暂时隐藏：建模流程和应用方向功能待实现 */}
         {/* <a href="#workflow">建模流程</a> */}
         {/* <a href="#applications">应用方向</a> */}

@@ -12,6 +12,28 @@ interface AlgorithmCardProps {
   onAddToComparison: (algo: AlgorithmItem) => void;
 }
 
+// 中文注释：医疗领域最常用的核心算法列表（精简版）
+const medicalAlgorithms = new Set([
+  // 经典机器学习 - 疾病风险预测
+  '逻辑回归',
+  '随机森林',
+  'XGBoost',
+
+  // 深度学习 - 医学影像
+  'CNN',
+  'U-Net',
+  'Transformer',
+
+  // 生存分析 - 预后研究
+  'Cox比例风险模型',
+
+  // NLP - 电子病历
+  'BERT',
+
+  // 聚类 - 患者分层
+  'K-Means',
+]);
+
 // 中文注释：算法卡片组件，展示单个算法的摘要信息
 export function AlgorithmCard({
   algorithm,
@@ -23,11 +45,12 @@ export function AlgorithmCard({
   onAddToComparison,
 }: AlgorithmCardProps) {
   const hasSketch = Boolean(getExcalidrawScene(algorithm.name));
+  const isMedical = medicalAlgorithms.has(algorithm.name);
 
   return (
     <div className={`algorithm-card-wrapper ${isInComparison ? 'in-comparison' : ''}`}>
       <button
-        className={`algorithm-card ${isSelected ? 'active' : ''} ${hasSketch ? 'has-sketch' : 'no-sketch'} ${isCompleted ? 'completed' : ''}`}
+        className={`algorithm-card ${isSelected ? 'active' : ''} ${hasSketch ? 'has-sketch' : 'no-sketch'} ${isCompleted ? 'completed' : ''} ${isMedical ? 'medical' : ''}`}
         data-category={algorithm.categories.join(' ')}
         data-sketch={hasSketch ? 'present' : 'missing'}
         title={hasSketch ? '已匹配手绘图解' : '暂未匹配手绘图解'}
@@ -37,6 +60,11 @@ export function AlgorithmCard({
         {isCompleted && (
           <span className="algorithm-card-check">
             <CheckCircle2 size={18} />
+          </span>
+        )}
+        {isMedical && (
+          <span className="algorithm-card-medical-badge">
+            🏥
           </span>
         )}
         <span className={`algorithm-card-badge ${hasSketch ? 'present' : 'missing'}`}>
@@ -50,7 +78,7 @@ export function AlgorithmCard({
         <strong>{algorithm.family}</strong>
         <p>{algorithm.description}</p>
       </button>
-      
+
       <button
         className={`add-to-comparison-btn ${isInComparison ? 'active' : ''}`}
         type="button"

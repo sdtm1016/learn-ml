@@ -5,6 +5,7 @@ import { AlgorithmGraphModal } from './components/AlgorithmGraphModal';
 import { ComparisonPanel } from './components/ComparisonPanel';
 import { ComparisonModal } from './components/ComparisonModal';
 import { KeyboardHelpModal } from './components/KeyboardHelpModal';
+import { MedicalAlgorithmModal } from './components/MedicalAlgorithmModal';
 import { Header } from './components/layout/Header';
 import { ProgressPanel } from './components/ProgressPanel';
 import { SketchModal } from './components/SketchModal';
@@ -26,6 +27,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isKeyboardHelpOpen, setIsKeyboardHelpOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
+  const [isMedicalDocOpen, setIsMedicalDocOpen] = useState(false);
   const { progress, toggleComplete, updateLastViewed, isCompleted } = useProgress();
 
   // 中文注释：初始化主题
@@ -99,7 +101,10 @@ function App() {
 
   return (
     <div className="app-shell" id="top">
-      <Header onSelectAlgorithm={openAlgorithmModal} />
+      <Header
+        onSelectAlgorithm={openAlgorithmModal}
+        onOpenMedicalDoc={() => setIsMedicalDocOpen(true)}
+      />
 
       <main>
         <HeroSection
@@ -184,6 +189,12 @@ function App() {
         onClose={() => setIsGraphModalOpen(false)}
         onSelectAlgorithm={openAlgorithmModal}
         isCompleted={isCompleted}
+      />
+
+      {/* 中文注释：医疗AI核心算法详解 Modal */}
+      <MedicalAlgorithmModal
+        isOpen={isMedicalDocOpen}
+        onClose={() => setIsMedicalDocOpen(false)}
       />
     </div>
   );

@@ -30,6 +30,28 @@ const relationStyles: Record<RelationType, { color: string; label: string }> = {
   used_in: { color: '#f59e0b', label: '用于' },
 };
 
+// 中文注释：医疗领域最常用的核心算法列表（精简版）
+const medicalAlgorithms = new Set([
+  // 经典机器学习 - 疾病风险预测
+  '逻辑回归',
+  '随机森林',
+  'XGBoost',
+
+  // 深度学习 - 医学影像
+  'CNN',
+  'U-Net',
+  'Transformer',
+
+  // 生存分析 - 预后研究
+  'Cox比例风险模型',
+
+  // NLP - 电子病历
+  'BERT',
+
+  // 聚类 - 患者分层
+  'K-Means',
+]);
+
 // 中文注释：算法分类的颜色（key 必须与 algorithms.ts 的 AlgorithmCategory 取值一一对应）
 // 按 categories[0]（主分类）上色，确保同一主分类的节点视觉一致、便于在图中识别家族。
 const categoryColors: Record<string, string> = {
@@ -92,6 +114,7 @@ export function AlgorithmGraph({ onSelectAlgorithm, isCompleted }: AlgorithmGrap
     return relatedAlgorithms.map((algo) => {
       const pos = layoutPositions.get(algo.name) || { x: 0, y: 0 };
       const primaryCategory = algo.categories[0] || 'supervised';
+      const isMedical = medicalAlgorithms.has(algo.name);
 
       return {
         id: algo.name,
@@ -101,9 +124,12 @@ export function AlgorithmGraph({ onSelectAlgorithm, isCompleted }: AlgorithmGrap
           label: algo.name,
           algorithm: algo,
           isCompleted: isCompleted(algo.name),
+          isMedical,
         },
         style: {
-          background: categoryColors[primaryCategory] || '#64748b',
+          background: isMedical
+            ? `linear-gradient(135deg, ${categoryColors[primaryCategory] || '#64748b'} 0%, ${categoryColors[primaryCategory] || '#64748b'} 70%, #f59e0b 70%, #f59e0b 100%)`
+            : categoryColors[primaryCategory] || '#64748b',
           color: '#fff',
           border: isCompleted(algo.name) ? '3px solid #10b981' : '1px solid rgba(255,255,255,0.2)',
           borderRadius: '8px',
@@ -112,6 +138,7 @@ export function AlgorithmGraph({ onSelectAlgorithm, isCompleted }: AlgorithmGrap
           fontWeight: 600,
           cursor: 'pointer',
           transition: 'all 0.2s ease',
+          boxShadow: isMedical ? '0 0 12px rgba(245, 158, 11, 0.4)' : 'none',
         },
       };
     });
@@ -286,6 +313,23 @@ export function AlgorithmGraph({ onSelectAlgorithm, isCompleted }: AlgorithmGrap
                 </span>
               ))}
             </div>
+
+            <div className="graph-legend">
+              <span className="legend-title">标注：</span>
+              <span className="legend-item">
+                <span
+                  className="legend-badge"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #3b82f6 70%, #f59e0b 70%, #f59e0b 100%)',
+                    width: '32px',
+                    height: '16px',
+                    borderRadius: '4px',
+                    display: 'inline-block'
+                  }}
+                />
+                医疗常用
+              </span>
+            </div>
           </div>
         </Panel>
 
@@ -325,8 +369,12 @@ export function AlgorithmGraph({ onSelectAlgorithm, isCompleted }: AlgorithmGrap
                 {items.map((algo) => (
                   <button
                     key={algo.name}
-                    className={`isolated-item ${isCompleted(algo.name) ? 'completed' : ''}`}
+                    className={`isolated-item ${isCompleted(algo.name) ? 'completed' : ''} ${medicalAlgorithms.has(algo.name) ? 'medical' : ''}`}
                     onClick={() => handleIsolatedClick(algo)}
+                    style={medicalAlgorithms.has(algo.name) ? {
+                      background: `linear-gradient(135deg, ${categoryColors[cat] || '#64748b'} 0%, ${categoryColors[cat] || '#64748b'} 85%, #f59e0b 85%, #f59e0b 100%)`,
+                      boxShadow: '0 0 8px rgba(245, 158, 11, 0.3)'
+                    } : {}}
                   >
                     <span className="isolated-item-name">{algo.name}</span>
                     {isCompleted(algo.name) && <span className="isolated-item-check">✓</span>}
