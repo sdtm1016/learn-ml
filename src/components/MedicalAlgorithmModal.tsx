@@ -14,8 +14,9 @@ export function MedicalAlgorithmModal({ isOpen, onClose }: MedicalAlgorithmModal
 
   useEffect(() => {
     if (isOpen) {
-      // 加载 Markdown 文档
-      fetch('/docs/医疗AI核心算法详解.md')
+      // 加载 Markdown 文档，使用 BASE_URL 确保在 GitHub Pages 上路径正确
+      const docPath = `${import.meta.env.BASE_URL}docs/医疗AI核心算法详解.md`;
+      fetch(docPath)
         .then((res) => res.text())
         .then((text) => {
           setContent(text);
