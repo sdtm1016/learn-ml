@@ -89,6 +89,23 @@ button {
   gap: 12px;
 }
 
+/* GitHub 源代码链接 */
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  background: var(--surface-hover, rgba(0, 0, 0, 0.06));
+  color: var(--accent, #2563eb);
+}
+
 .brand,
 .nav-links,
 .hero-actions,

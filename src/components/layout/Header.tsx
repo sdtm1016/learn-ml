@@ -1,5 +1,6 @@
 import { SearchBar } from '../SearchBar';
 import { ThemeToggle } from '../ThemeToggle';
+import { Github } from 'lucide-react';
 import type { AlgorithmItem } from '../../data/algorithms';
 
 interface HeaderProps {
@@ -17,6 +18,16 @@ export function Header({ onSelectAlgorithm, onOpenMedicalDoc }: HeaderProps) {
       </a>
       <SearchBar onSelectAlgorithm={onSelectAlgorithm} />
       <div className="header-actions">
+        <a
+          className="github-link"
+          href="https://github.com/sdtm1016/learn-ml"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="查看源代码"
+          title="GitHub 源代码"
+        >
+          <Github size={20} />
+        </a>
         <ThemeToggle />
       </div>
       <nav className="nav-links" aria-label="主导航">
