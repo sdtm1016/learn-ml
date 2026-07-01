@@ -6,10 +6,10 @@ import react from '@vitejs/plugin-react';
 // 避免单个 chunk 过大、改善缓存命中与按需加载。
 // 注意：excalidraw(含 mermaid-to-excalidraw)、reactflow 体积都很大，
 // 且都已通过 React.lazy 懒加载，分到独立 chunk 后只在实际使用时才下载。
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   // GitHub Pages 部署时需要设置 base 为仓库名
-  // 使用 /learn-ml/ 作为 base 路径
-  base: '/learn-ml/',
+  // 开发环境使用 /，生产环境使用 /learn-ml/
+  base: mode === 'production' ? '/learn-ml/' : '/',
   plugins: [react()],
   build: {
     rollupOptions: {
@@ -47,4 +47,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
