@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { boostingTrilogy } from '../../../data/boostingTrilogy';
 import type { AlgorithmId, DemoData } from '../../../data/boostingTrilogy/types';
+import { BaggingVsBoosting } from './BaggingVsBoosting';
 import { EvolutionTimeline } from './EvolutionTimeline';
 import { Stepper, useAutoPlay } from './Stepper';
 import { GbdtDemo } from './demos/GbdtDemo';
@@ -32,6 +33,8 @@ export function BoostingTrilogySection() {
         <h2 id="bt-title">梯度提升三连 · 三代演进</h2>
         <p>决策树怎么做梯度下降？GBDT、XGBoost、LightGBM 如何层层加速。点击下方任一代开始演示。</p>
       </div>
+
+      <BaggingVsBoosting />
 
       <EvolutionTimeline demos={boostingTrilogy} activeId={activeId} onSelect={setActiveId} />
 
