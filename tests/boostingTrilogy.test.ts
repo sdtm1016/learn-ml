@@ -47,3 +47,23 @@ describe('boostingTrilogy 数据契约', () => {
     });
   }
 });
+
+// 测试意图：步进逻辑是演示器的交互核心——边界禁用、播放递进、手动干预。
+// 抽成纯函数便于 node 环境测试，无需 DOM。
+describe('步进逻辑', () => {
+  it('nextStep 到末步不再前进', () => {
+    expect(nextStep(4, 5)).toBe(4);
+    expect(nextStep(2, 5)).toBe(3);
+  });
+
+  it('prevStep 到 0 不再后退', () => {
+    expect(prevStep(0)).toBe(0);
+    expect(prevStep(3)).toBe(2);
+  });
+
+  it('clampStep 把越界值拉回合法范围', () => {
+    expect(clampStep(-1, 5)).toBe(0);
+    expect(clampStep(10, 5)).toBe(4);
+    expect(clampStep(2, 5)).toBe(2);
+  });
+});
