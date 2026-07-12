@@ -155,4 +155,26 @@ assert(algorithmMatches.length >= 30, 'algorithms module should define at least 
 // 意图：Excalidraw 体积大，必须懒加载，否则拖垮首屏。
 assert(sketchModal.includes('lazy('), 'SketchModal should lazy-load Excalidraw');
 
+// ---- 12. 梯度提升三连模块骨架契约 ----
+// 意图：保护这个可视化教学模块的入口和核心结构不被无意删除。
+assert(exists('src/components/sections/BoostingTrilogySection/index.tsx'), 'BoostingTrilogySection should exist');
+const boostingSource = readDir('src/components/sections/BoostingTrilogySection', '.tsx');
+['BoostingTrilogySection', 'EvolutionTimeline', 'useAutoPlay'].forEach((text) => {
+  assert(boostingSource.includes(text), `BoostingTrilogySection should include ${text}`);
+});
+// Header 含锚点
+const headerSource = read('src/components/layout/Header.tsx');
+assert(headerSource.includes('#boosting-trilogy'), 'Header should link to #boosting-trilogy');
+// App 挂载了 section
+assert(app.includes('BoostingTrilogySection'), 'App should mount BoostingTrilogySection');
+// CSS 含关键类
+const boostingStyles = read('src/styles/boosting-trilogy.css');
+['.bt-section', '.bt-timeline', '.bt-stepper', '@media'].forEach((cls) => {
+  assert(boostingStyles.includes(cls), `boosting-trilogy.css should include ${cls}`);
+});
+// 数据契约：三个 demo 文件存在
+['gbdt', 'xgboost', 'lightgbm'].forEach((id) => {
+  assert(exists(`src/data/boostingTrilogy/${id}.ts`), `boostingTrilogy/${id}.ts should exist`);
+});
+
 console.log('React website structure checks passed.');
