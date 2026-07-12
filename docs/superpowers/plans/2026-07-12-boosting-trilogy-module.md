@@ -60,6 +60,8 @@ import { xgboostDemo } from '../src/data/boostingTrilogy/xgboost';
 import { lightgbmDemo } from '../src/data/boostingTrilogy/lightgbm';
 import { boostingTrilogy } from '../src/data/boostingTrilogy/index';
 import type { DemoData } from '../src/data/boostingTrilogy/types';
+// 步进纯函数（Task 6 实现，先放在顶部 import 块，避免末尾追加触发 import/first 规则）
+import { nextStep, prevStep, clampStep } from '../src/components/sections/BoostingTrilogySection/Stepper';
 
 // 测试意图：三个 demo 的数据结构必须满足教学演示契约。
 // 若 steps 为空、索引断裂或元信息缺失，演示器会渲染崩坏——这是核心契约。
@@ -317,7 +319,7 @@ git commit -m "feat(boosting-trilogy): GBDT 演示预计算数据"
 **Files:**
 - Create: `src/data/boostingTrilogy/xgboost.ts`
 
-**数值说明：** 增益公式用 `gain = ½·[G_L²/(H_L+λ) + G_R²/(H_R+λ) − (G_L+G_R)²/(H_L+H_R+λ)] − λ`，λ=1。叶子权重 `w* = −G/(H+λ)`。下面是教学示意值，手算保证 bestSplit 的 gain 是候选中最大。
+**数值说明：** 增益公式 `gain = ½·[G_L²/(H_L+λ) + G_R²/(H_R+λ) − (G_L+G_R)²/(H_L+H_R+λ)] − λ`，λ=1。叶子权重 `w* = −G/(H+λ)`。5 个样本按 x 排序：`g=[-1.5, -0.8, 0.2, 0.9, 1.5]`，`h=0.5`（每个）。下方 gain/w* 值由公式逐项算出（已用脚本复核），bestSplit 的 gain 确为候选最大。
 
 - [ ] **Step 1: 实现 XGBoost 数据**
 
@@ -325,9 +327,16 @@ git commit -m "feat(boosting-trilogy): GBDT 演示预计算数据"
 
 ```ts
 // 中文注释：XGBoost 演示预计算数据
-// 增益公式：gain = ½·[G_L²/(H_L+λ) + G_R²/(H_R+λ) − (G_L+G_R)²/(H_L+H_R+λ)] − λ
-// 叶子权重：w* = -G/(H+λ)，λ=1。数值为教学示意，保证 bestSplit.gain 为候选最大值。
+// 5 样本按 x 排序：g=[-1.5,-0.8,0.2,0.9,1.5]，h=0.5。
+// 增益公式：gain = ½·[G_L²/(H_L+λ) + G_R²/(H_R+λ) − (G_L+G_R)²/(H_L+H_R+λ)] − λ，λ=1。
+// 叶子权重：w* = -G/(H+λ)。所有 gain/w* 均由公式逐项算出，bestSplit.gain 为候选最大值。
 import type { DemoData, XgboostVisual } from './types';
+
+// 五个样本的梯度（g）和二阶导（h），按特征 x 升序排列
+const SAMPLE_NODES = [
+  { g: -1.5, h: 0.5 }, { g: -0.8, h: 0.5 }, { g: 0.2, h: 0.5 },
+  { g: 0.9, h: 0.5 }, { g: 1.5, h: 0.5 },
+];
 
 export const xgboostDemo: DemoData<XgboostVisual> = {
   algorithmId: 'xgboost',
@@ -342,10 +351,7 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
       narrative: 'GBDT 用一阶梯度（残差）决定每棵树学什么。XGBoost 进一步用上二阶导 h。',
       visual: {
         lambda: 1,
-        nodes: [
-          { g: -0.8, h: 0.5 }, { g: -0.4, h: 0.4 }, { g: 0.3, h: 0.6 },
-          { g: 0.6, h: 0.5 }, { g: 0.9, h: 0.7 },
-        ],
+        nodes: SAMPLE_NODES,
         candidates: [],
       },
     },
@@ -355,10 +361,7 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
       narrative: '每个样本除了 g，还有 h（二阶导）。两者一起给出更准的下降方向和步长。',
       visual: {
         lambda: 1,
-        nodes: [
-          { g: -0.8, h: 0.5 }, { g: -0.4, h: 0.4 }, { g: 0.3, h: 0.6 },
-          { g: 0.6, h: 0.5 }, { g: 0.9, h: 0.7 },
-        ],
+        nodes: SAMPLE_NODES,
         candidates: [],
       },
     },
@@ -368,34 +371,32 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
       narrative: '对每个候选分裂点，用 G、H 的累加按公式算 gain，挑增益最大的。',
       visual: {
         lambda: 1,
-        nodes: [
-          { g: -0.8, h: 0.5 }, { g: -0.4, h: 0.4 }, { g: 0.3, h: 0.6 },
-          { g: 0.6, h: 0.5 }, { g: 0.9, h: 0.7 },
-        ],
+        nodes: SAMPLE_NODES,
         candidates: [
-          { threshold: 1.5, G_L: -0.8, H_L: 0.5, G_R: 1.4, H_R: 2.2, gain: 0.62 },
-          { threshold: 2.5, G_L: -1.2, H_L: 0.9, G_R: 1.8, H_R: 1.8, gain: 1.35 },
-          { threshold: 3.5, G_L: -0.9, H_L: 1.5, G_R: 1.5, H_R: 1.2, gain: 1.05 },
+          // x<1.5：左=[-1.5], 右=[-0.8,0.2,0.9,1.5]
+          { threshold: 1.5, G_L: -1.5, H_L: 0.5, G_R: 1.8, H_R: 2.0, gain: 0.28 },
+          // x<2.5：左=[-1.5,-0.8], 右=[0.2,0.9,1.5]
+          { threshold: 2.5, G_L: -2.3, H_L: 1.0, G_R: 2.6, H_R: 1.5, gain: 1.66 },
+          // x<3.5：左=[-1.5,-0.8,0.2], 右=[0.9,1.5]
+          { threshold: 3.5, G_L: -2.1, H_L: 1.5, G_R: 2.4, H_R: 1.0, gain: 1.31 },
         ],
       },
     },
     {
       index: 3,
       title: '选最大增益 + 闭式最优权重',
-      narrative: 'threshold=2.5 增益最大。叶子权重直接闭式算出 w* = -G/(H+λ)，无需线性搜索。',
+      narrative: 'threshold=2.5 增益 1.66 最大。叶子权重直接闭式算出 w* = -G/(H+λ)，无需线性搜索。',
       visual: {
         lambda: 1,
-        nodes: [
-          { g: -0.8, h: 0.5 }, { g: -0.4, h: 0.4 }, { g: 0.3, h: 0.6 },
-          { g: 0.6, h: 0.5 }, { g: 0.9, h: 0.7 },
-        ],
+        nodes: SAMPLE_NODES,
         candidates: [
-          { threshold: 1.5, G_L: -0.8, H_L: 0.5, G_R: 1.4, H_R: 2.2, gain: 0.62 },
-          { threshold: 2.5, G_L: -1.2, H_L: 0.9, G_R: 1.8, H_R: 1.8, gain: 1.35 },
-          { threshold: 3.5, G_L: -0.9, H_L: 1.5, G_R: 1.5, H_R: 1.2, gain: 1.05 },
+          { threshold: 1.5, G_L: -1.5, H_L: 0.5, G_R: 1.8, H_R: 2.0, gain: 0.28 },
+          { threshold: 2.5, G_L: -2.3, H_L: 1.0, G_R: 2.6, H_R: 1.5, gain: 1.66 },
+          { threshold: 3.5, G_L: -2.1, H_L: 1.5, G_R: 2.4, H_R: 1.0, gain: 1.31 },
         ],
-        bestSplit: { threshold: 2.5, gain: 1.35 },
-        bestLeafWeight: -0.63, // 左叶 w* = -(-1.2)/(0.9+1) ≈ 0.63；展示取负号约定后的示意值
+        bestSplit: { threshold: 2.5, gain: 1.66 },
+        // 左叶（x<2.5）闭式权重：w* = -G_L/(H_L+λ) = -(-2.3)/(1.0+1) = 1.15
+        bestLeafWeight: 1.15,
       },
     },
     {
@@ -404,12 +405,9 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
       narrative: '目标函数含 Ω = γ·叶子数 + ½λ·Σw²。λ、γ 越大越抑制复杂树，防过拟合。',
       visual: {
         lambda: 1,
-        nodes: [
-          { g: -0.8, h: 0.5 }, { g: -0.4, h: 0.4 }, { g: 0.3, h: 0.6 },
-          { g: 0.6, h: 0.5 }, { g: 0.9, h: 0.7 },
-        ],
+        nodes: SAMPLE_NODES,
         candidates: [],
-        bestLeafWeight: -0.63,
+        bestLeafWeight: 1.15,
       },
     },
   ],
@@ -594,13 +592,11 @@ git commit -m "feat(boosting-trilogy): 聚合入口 + 数据测试通过"
 
 - [ ] **Step 1: 追加步进逻辑失败测试**
 
-在 `tests/boostingTrilogy.test.ts` 末尾追加（用自定义 hook 测纯逻辑，避免引入 jsdom）：
+在 `tests/boostingTrilogy.test.ts` 末尾追加测试用例（import 已在 Task 1 的顶部 import 块中写好，这里只追加 describe）：
 
 ```ts
 // 测试意图：步进逻辑是演示器的交互核心——边界禁用、播放递进、手动干预。
 // 抽成纯函数便于 node 环境测试，无需 DOM。
-import { nextStep, prevStep, clampStep } from '../src/components/sections/BoostingTrilogySection/Stepper';
-
 describe('步进逻辑', () => {
   it('nextStep 到末步不再前进', () => {
     expect(nextStep(4, 5)).toBe(4);
@@ -644,8 +640,9 @@ export function nextStep(step: number, total: number): number {
   return clampStep(step + 1, total);
 }
 
+// 中文注释：prevStep 只需下移一位且不低于 0（单参数，与 nextStep 的"total 约束"语义对称）
 export function prevStep(step: number): number {
-  return clampStep(step - 1, 1);
+  return Math.max(step - 1, 0);
 }
 
 // ---- 组件 ----
@@ -1035,7 +1032,7 @@ git commit -m "feat(boosting-trilogy): LightGBM 演示渲染器"
 // 组合：演进时间线 + tab 切换 + 步进器 + 当前 demo 渲染器 + 讲解文字
 import { useState } from 'react';
 import { boostingTrilogy } from '../../../data/boostingTrilogy';
-import type { AlgorithmId } from '../../../data/boostingTrilogy/types';
+import type { AlgorithmId, DemoData } from '../../../data/boostingTrilogy/types';
 import { EvolutionTimeline } from './EvolutionTimeline';
 import { Stepper, useAutoPlay } from './Stepper';
 import { GbdtDemo } from './demos/GbdtDemo';
@@ -1131,7 +1128,7 @@ function DemoStage({ demo }: DemoStageProps) {
 }
 ```
 
-> 上面的 `DemoStage` 子组件需要引入 `DemoData` 类型。实现时在 import 区加：`import type { AlgorithmId, DemoData } from '../../../data/boostingTrilogy/types';`。把舞台拆成子组件 + 父级 `key={activeId}` 是 tab 切换重置 step 的干净做法（无需手动 useEffect 重置，React 重挂载自动归零）。
+> 上面的 `DemoStage` 子组件用到了 `DemoData` 类型，已在上面的 import 中和 `AlgorithmId` 一起引入（`import type { AlgorithmId, DemoData } ...`）。把舞台拆成子组件 + 父级 `key={activeId}` 是 tab 切换重置 step 的干净做法（无需手动 useEffect 重置，React 重挂载自动归零）。
 
 - [ ] **Step 2: 提交**
 
