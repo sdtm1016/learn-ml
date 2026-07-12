@@ -1,12 +1,12 @@
 // 中文注释：三代演进时间线——高亮当前算法，显示每代相对上代的新增点
-import type { DemoData } from '../../../data/boostingTrilogy/types';
+import type { AlgorithmId, DemoData } from '../../../data/boostingTrilogy/types';
 
 const CIRCLED = ['①', '②', '③']; // 三代序号
 
 interface EvolutionTimelineProps {
   demos: DemoData<unknown>[];
-  activeId: string;
-  onSelect: (id: string) => void;
+  activeId: AlgorithmId;
+  onSelect: (id: AlgorithmId) => void;
 }
 
 export function EvolutionTimeline({ demos, activeId, onSelect }: EvolutionTimelineProps) {
