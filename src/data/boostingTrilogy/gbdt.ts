@@ -78,7 +78,7 @@ export const gbdtDemo: DemoData<GbdtVisual> = {
       title: '小结：这就是用决策树做梯度下降',
       narrative: '每棵树都在修正前面没学好的部分。累加多棵弱树，就得到一个强模型。',
       visual: {
-        round: 3,
+        round: 4,
         points: [
           { x: 1, yTrue: 0.1, yPred: 0.1, residual: 0.0 },
           { x: 2, yTrue: 0.3, yPred: 0.3, residual: 0.0 },

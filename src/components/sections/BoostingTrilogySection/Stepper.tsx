@@ -56,25 +56,21 @@ export function useAutoPlay(total: number, intervalMs = 1500) {
 
   useEffect(() => {
     if (!playing) return;
-    // 末步停止
+    // 末步停止（guard 在 effect 体内，干净的停止时机）
     if (step >= total - 1) {
       setPlaying(false);
       return;
     }
+    // 中文注释：每 tick 重建 interval（step 进依赖）。代价是定时器重建一次，
+    // 收益是停止逻辑不依赖"在 setStep 更新器里调用别的 setter"这种反模式。
     timerRef.current = setInterval(() => {
-      setStep((prev) => {
-        if (prev >= total - 1) {
-          setPlaying(false);
-          return prev;
-        }
-        return prev + 1;
-      });
+      setStep((prev) => (prev >= total - 1 ? prev : prev + 1));
     }, intervalMs);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [playing, total, intervalMs]); // 注意：step 不进依赖，用函数式更新
+  }, [playing, total, intervalMs, step]);
 
   function goNext() {
     setStep((prev) => nextStep(prev, total));

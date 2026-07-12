@@ -28,7 +28,7 @@ export function EvolutionTimeline({ demos, activeId, onSelect }: EvolutionTimeli
                 <li key={add}>{add}</li>
               ))}
             </ul>
-            {idx < demos.length - 1 && <span className="bt-timeline-arrow" aria-hidden>→</span>}
+            {idx < demos.length - 1 && <span className="bt-timeline-arrow" aria-hidden="true">→</span>}
           </li>
         );
       })}
