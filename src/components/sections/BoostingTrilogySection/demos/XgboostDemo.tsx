@@ -30,7 +30,10 @@ export function XgboostDemo({ visual }: XgboostDemoProps) {
             const isBest = bestSplit && c.threshold === bestSplit.threshold;
             return (
               <div key={c.threshold} className={`bt-gain-row ${isBest ? 'best' : ''}`}>
-                <span className="bt-gain-thresh">x&lt;{c.threshold}</span>
+                <span className="bt-gain-thresh">
+                  {isBest && <span className="bt-gain-best-mark" aria-label="最佳分裂">✓</span>}
+                  x&lt;{c.threshold}
+                </span>
                 <div className="bt-gain-track">
                   <div
                     className="bt-gain-fill"

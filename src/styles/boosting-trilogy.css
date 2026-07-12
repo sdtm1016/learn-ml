@@ -1,27 +1,29 @@
 /* 中文注释：梯度提升三连区块样式——全部用 CSS 变量，跟随明暗主题 */
 .bt-section { padding-block: 4rem; }
 
-/* 演进时间线 */
+/* 演进时间线：横向单行，箭头在节点中间（节点与箭头是 .bt-timeline 的同级子元素）*/
 .bt-timeline {
-  list-style: none; display: flex; gap: 1rem; flex-wrap: wrap;
+  list-style: none; display: flex; align-items: center; gap: .75rem;
+  flex-wrap: nowrap; overflow-x: auto;
   padding: 1rem; margin: 1.5rem 0;
   background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
 }
-.bt-timeline-node { position: relative; display: flex; flex-direction: column; gap: .35rem; }
+.bt-timeline-node { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 0; min-width: 0; }
 .bt-timeline-btn {
-  display: inline-flex; align-items: center; gap: .4rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
   padding: .5rem .8rem; border-radius: 8px; border: 1px solid var(--line);
-  background: var(--bg); color: var(--text); cursor: pointer;
+  background: var(--bg); color: var(--text); cursor: pointer; white-space: nowrap;
   transition: all .2s;
 }
 .bt-timeline-node.active .bt-timeline-btn {
   border-color: var(--accent); color: var(--accent); font-weight: 600;
 }
 .bt-timeline-additions {
-  list-style: none; margin: 0; padding-left: .8rem; font-size: .8rem; color: var(--muted);
+  list-style: none; margin: 0; padding-left: .8rem; font-size: .75rem; color: var(--muted); line-height: 1.5;
 }
 .bt-timeline-additions li::before { content: '＋ '; color: var(--accent); }
-.bt-timeline-arrow { color: var(--muted); align-self: center; }
+/* 箭头：作为 .bt-timeline 直接子元素，垂直居中于行内 */
+.bt-timeline-arrow { color: var(--muted); font-size: 1.1rem; flex: 0 0 auto; align-self: center; }
 
 /* tab */
 .bt-tabs { display: flex; gap: .5rem; border-bottom: 1px solid var(--line); margin-bottom: 1rem; }
@@ -33,14 +35,14 @@
 
 /* 演示舞台 */
 .bt-demo-stage { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; }
-.bt-demo-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; }
-.bt-demo-canvas { min-height: 240px; }
+.bt-demo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.bt-demo-canvas { min-height: 240px; display: flex; flex-direction: column; justify-content: center; }
 .bt-demo-narrative h3 { color: var(--accent); margin-top: 0; }
 .bt-new-additions { margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed var(--line); }
 .bt-mini-title { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 
-/* SVG 共用 */
-.bt-svg { width: 100%; height: auto; }
+/* SVG 共用——限制最大宽度，避免被列宽拉得过大失真；居中显示 */
+.bt-svg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; }
 .bt-axis { stroke: var(--line); stroke-width: 1; }
 .bt-residual-bar { stroke: var(--accent-pink); stroke-width: 2; transition: all .4s ease; }
 .bt-true-point { fill: var(--accent); transition: all .4s ease; }
@@ -58,13 +60,20 @@
 .bt-gh-h { color: var(--accent-pink); }
 
 /* 增益条 */
-.bt-gain-row { display: flex; align-items: center; gap: .5rem; margin: .25rem 0; }
-.bt-gain-thresh { width: 60px; font-size: .8rem; color: var(--muted); }
+.bt-gain-row {
+  display: flex; align-items: center; gap: .5rem; margin: .3rem 0;
+  padding: .25rem .4rem; border-radius: 6px; border: 1px solid transparent;
+  transition: background .2s, border-color .2s;
+}
+.bt-gain-thresh { width: 64px; font-size: .8rem; color: var(--muted); flex: 0 0 64px; }
+.bt-gain-best-mark { color: var(--accent); font-weight: 700; margin-right: .15rem; }
 .bt-gain-track { flex: 1; height: 10px; background: var(--panel-strong); border-radius: 5px; overflow: hidden; }
 .bt-gain-fill { height: 100%; background: var(--accent-blue); transition: width .4s ease; }
+.bt-gain-val { width: 44px; text-align: right; font-size: .8rem; flex: 0 0 44px; }
+/* 最佳分裂：整行加底色 + 强调色边框 + 填充/数值变色，三层视觉强化 */
+.bt-gain-row.best { background: var(--overlay); border-color: var(--accent); }
 .bt-gain-row.best .bt-gain-fill { background: var(--accent); }
 .bt-gain-row.best .bt-gain-val { font-weight: 700; color: var(--accent); }
-.bt-gain-val { width: 40px; text-align: right; font-size: .8rem; }
 .bt-formula-note { font-size: .8rem; color: var(--muted); margin-top: .8rem; }
 
 /* 直方图 */
@@ -90,8 +99,7 @@
 .bt-step-btn:disabled { opacity: .4; cursor: not-allowed; }
 .bt-step-indicator { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 50px; text-align: center; }
 
-/* 窄屏纵向堆叠 */
+/* 窄屏：演示区纵向堆叠；时间线保持横向（已设 overflow-x: auto 可横滑） */
 @media (max-width: 720px) {
   .bt-demo-layout { grid-template-columns: 1fr; }
-  .bt-timeline { flex-direction: column; }
 }
