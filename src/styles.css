@@ -3,6 +3,7 @@
 @import './styles/theme-toggle.css';
 @import './styles/keyboard-help.css';
 @import './styles/algorithm-graph.css';
+@import './styles/boosting-trilogy.css';
 
 /* 中文注释：默认明亮主题 */
 :root {
