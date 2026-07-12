@@ -30,7 +30,9 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
     {
       index: 1,
       title: '引入二阶导 h',
-      narrative: '每个样本除了 g，还有 h（二阶导）。两者一起给出更准的下降方向和步长。',
+      narrative:
+        'GBDT 只用一阶导（负梯度 g）。XGBoost 把 Loss 对预测值做泰勒展开到二阶项，' +
+        '所以每个样本除 g 还有 h（二阶导）。g 给方向、h 给曲率，下降方向和步长更准。',
       visual: {
         lambda: 1,
         nodes: SAMPLE_NODES,
@@ -40,7 +42,9 @@ export const xgboostDemo: DemoData<XgboostVisual> = {
     {
       index: 2,
       title: '分裂打分公式',
-      narrative: '对每个候选分裂点，用 G、H 的累加按公式算 gain，挑增益最大的。',
+      narrative:
+        '用 g、h 的累加 G、H，能闭式算出每个候选分裂的增益——不用真的去拟合回归树。' +
+        '这是 XGBoost 比 GBDT 更快、更稳的关键之一。',
       visual: {
         lambda: 1,
         nodes: SAMPLE_NODES,

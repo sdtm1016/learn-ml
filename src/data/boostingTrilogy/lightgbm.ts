@@ -12,7 +12,9 @@ export const lightgbmDemo: DemoData<LightgbmVisual> = {
     {
       index: 0,
       title: '回顾：XGBoost 找分裂要遍历所有值',
-      narrative: 'XGBoost 对每个特征的每个取值都比较分裂增益，数据大时很慢。',
+      narrative:
+        'LightGBM 继承 XGBoost 的二阶导 + 分裂打分框架，只是把"找最优分裂"这一步做得更快更省。' +
+        '先看 XGBoost 的痛点：它对每个特征的每个取值都比较分裂增益，数据大时很慢。',
       visual: {
         histogram: [],
         leaves: [{ id: 'root', depth: 0, isSplit: false }],
@@ -22,7 +24,9 @@ export const lightgbmDemo: DemoData<LightgbmVisual> = {
     {
       index: 1,
       title: '直方图：连续值装桶',
-      narrative: '把连续特征分成 k 个桶，只在桶边界上找分裂，快很多。',
+      narrative:
+        '直方图不改算法本质（还是找让增益最大的分裂），只是把连续值装进 k 个桶、' +
+        '在桶边界上比，从 O(样本数) 降到 O(桶数)，快很多。',
       visual: {
         histogram: [
           { bin: 1, count: 12, gradientSum: -3.2 },

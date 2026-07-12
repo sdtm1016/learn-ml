@@ -42,12 +42,39 @@
 .bt-mini-title { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 
 /* SVG 共用——限制最大宽度，避免被列宽拉得过大失真；居中显示 */
-.bt-svg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; }
+.bt-svg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0.5rem auto 0; }
 .bt-axis { stroke: var(--line); stroke-width: 1; }
 .bt-residual-bar { stroke: var(--accent-pink); stroke-width: 2; transition: all .4s ease; }
 .bt-true-point { fill: var(--accent); transition: all .4s ease; }
 .bt-pred-point { fill: var(--accent-blue); transition: all .4s ease; }
 .bt-tree-note { font-size: .85rem; color: var(--muted); margin-top: .5rem; }
+
+/* GBDT 学习率徽标 */
+.bt-eta-badge {
+  display: inline-block; font-size: .75rem; font-weight: 600;
+  color: var(--accent); background: var(--overlay);
+  padding: .2rem .6rem; border-radius: 999px; border: 1px solid var(--accent);
+}
+
+/* GBDT 预测值更新公式行：F_m = F_{m-1} + η × 叶子值 = ... */
+.bt-formula-row {
+  font-size: .8rem; color: var(--text); margin: .6rem 0 .2rem;
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+}
+.bt-formula-nums { color: var(--muted); }
+.bt-formula-nums strong { color: var(--accent); }
+
+/* GBDT 本轮残差小表（= 负梯度，正负不同色）*/
+.bt-residual-table { margin-top: .6rem; }
+.bt-residual-cells { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .25rem; }
+.bt-residual-cell {
+  font-size: .72rem; font-variant-numeric: tabular-nums;
+  padding: .15rem .4rem; border-radius: 4px;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.bt-residual-cell.pos { color: var(--accent-blue); border-color: var(--accent-blue); }
+.bt-residual-cell.neg { color: var(--accent-pink); border-color: var(--accent-pink); }
+.bt-residual-cell.zero { color: var(--muted); }
 
 /* XGBoost g/h 网格 */
 .bt-gh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: .4rem; margin-bottom: 1rem; }

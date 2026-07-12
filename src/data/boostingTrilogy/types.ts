@@ -26,6 +26,8 @@ export interface GbdtVisual {
   // 6-8 个样本点：x 坐标、真值、当前预测值、当前残差
   points: { x: number; yTrue: number; yPred: number; residual: number }[];
   round: number;        // 当前是第几棵树（0 = 初始均值预测）
+  eta: number;          // 学习率（收缩系数），F_m = F_{m-1} + eta × 叶子值
+  prevPred?: number[];  // 上一轮各样本预测值（用于展示 F_{m-1}，step 0 无）
   newTree?: {           // 本轮新增树（简化结构）
     feature: string;
     threshold: number;
