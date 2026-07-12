@@ -33,6 +33,7 @@ export function Header({ onSelectAlgorithm, onOpenMedicalDoc }: HeaderProps) {
       <nav className="nav-links" aria-label="主导航">
         <a href="#roadmap">学习路线</a>
         <a href="#algorithms">算法图谱</a>
+        <a href="#boosting-trilogy">梯度提升</a>
         <button
           className="nav-link-button"
           onClick={onOpenMedicalDoc}

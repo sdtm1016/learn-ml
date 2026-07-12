@@ -10,6 +10,7 @@ import { Header } from './components/layout/Header';
 import { ProgressPanel } from './components/ProgressPanel';
 import { SketchModal } from './components/SketchModal';
 import { AlgorithmSection } from './components/sections/AlgorithmSection';
+import { BoostingTrilogySection } from './components/sections/BoostingTrilogySection';
 import { ConceptSection } from './components/sections/ConceptSection';
 import { HeroSection } from './components/sections/HeroSection';
 import { RoadmapSection } from './components/sections/RoadmapSection';
@@ -113,6 +114,8 @@ function App() {
         />
 
         <ConceptSection />
+
+        <BoostingTrilogySection />
 
         <RoadmapSection
           onOpenAlgorithmByName={openAlgorithmByName}
