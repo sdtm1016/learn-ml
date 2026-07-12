@@ -49,7 +49,7 @@ src/
 │           │   ├── GbdtDemo.tsx           # 残差拟合演示
 │           │   ├── XgboostDemo.tsx        # 二阶导 + 分裂打分演示
 │           │   └── LightgbmDemo.tsx       # 直方图 + Leaf-wise 演示
-│           └── BoostingTrilogySection.css # 区块专属样式
+# （区块专属样式放在 src/styles/boosting-trilogy.css，沿用 styles.css 现有 @import './styles/*.css' 约定）
 ├── data/
 │   └── boostingTrilogy/
 │       ├── types.ts                       # 演示数据类型契约
@@ -61,7 +61,7 @@ src/
 ### 2.2 修改文件清单（最小改动）
 - `src/App.tsx`：在 `<ConceptSection />` 与 `<RoadmapSection />` 之间挂载 `<BoostingTrilogySection />`。
 - `src/components/layout/Header.tsx`：导航栏新增一个锚点链接 `#boosting-trilogy`（沿用 `#roadmap` / `#algorithms` 的 `<a>` 模式）。
-- `src/styles.css`：`@import` 新增的 `BoostingTrilogySection.css`（沿用现有 css 模块 import 模式）。
+- `src/styles.css`：`@import './styles/boosting-trilogy.css';`（沿用现有 `@import './styles/*.css'` 约定，CSS 统一放在 `src/styles/` 下，不放组件目录）。
 - `src/components/sections/AlgorithmSection/AlgorithmDetail.tsx`（或对应详情组件）：仅对 GBDT/XGBoost/LightGBM 三者，在详情里加一个"进入可视化讲解 →"按钮，点击滚动到 `#boosting-trilogy` 并定位对应 tab。（此条为可选增强，若详情组件改动复杂则一期先不做，只在 Header 入口暴露。）
 
 ---
@@ -89,7 +89,7 @@ export interface DemoData<Visual> {
   algorithmName: string;          // 中文名
   algorithmLabel: string;         // 英文名
   oneLiner: string;               // 一句话定位（用户给的三句话之一）
-  newAdditions: string[];         // 相对上一代新增了什么（时间线用）
+  newAdditions: string[];         // 相对上一代新增了什么（demo 级、每个算法一套，用于时间线 + 右下角固定贴士）
   steps: DemoStep<Visual>[];      // 固定步骤数组
 }
 ```
@@ -133,6 +133,8 @@ interface LightgbmVisual {
 ```
 
 > 具体数值在实现阶段手算/离线脚本算好后填入，确保教学正确性。每个 demo 步骤数控制在 4-6 步。
+>
+> **离线脚本归属**：预计算脚本提交到 `scripts/precompute-boosting.ts`（一次性运行、产物即 `src/data/boostingTrilogy/*.ts`）。保留脚本是为了让数值可复算、可审计（教学正确性）；脚本本身不进构建产物、不参与运行时。若某 demo 全部数值可手算（如 GBDT 残差），允许不写脚本、直接手填并加注释，但需在数据文件头注明数值来源。
 
 ---
 
